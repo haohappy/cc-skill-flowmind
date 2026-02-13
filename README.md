@@ -32,8 +32,10 @@ FlowMind is a productivity platform designed to help you manage your goals and t
 
 While Claude Code is helping you write code, instantly capture tasks without breaking flow:
 
+```
 /flowmind add task "Add error handling to this function" --priority high
 /flowmind add task "Write tests for UserService" --due 2025-02-20No need to switch to another app — stay focused in Claude Code.
+```
 
 
 **2. Track Tasks**
