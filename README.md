@@ -5,7 +5,11 @@
 
 Connect [Claude Code](https://docs.anthropic.com/en/docs/claude-code) to [FlowMind](https://flowmind.life) — your personal productivity platform for goals, tasks, and notes.
 
-## Screenshots
+## Flowmind
+
+Flowmind is a powerful platform designed to help you manage your goals and tasks with clarity and focus. It also integrates seamlessly with AI bots, giving you a unified space to coordinate both human and automated work.
+
+You can easily connect your bots, such as OpenClaw, to Flowmind and track their activities in real time. Monitor progress, review outputs, and stay in control of every job from a single, organized dashboard.
 
 ![Dashboard](images/dashboard.png)
 *Dashboard — Track your productivity journey*
