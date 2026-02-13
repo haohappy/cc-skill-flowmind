@@ -1,0 +1,18 @@
+{
+  "name": "flowmind",
+  "description": "FlowMind productivity skill for Claude Code — manage goals, tasks, and notes",
+  "owner": {
+    "name": "haohappy"
+  },
+  "metadata": {
+    "description": "Connect Claude Code to FlowMind for goal tracking, task management, and note-taking. Supports creating tasks with priorities and due dates, organizing goals by category, and capturing notes.",
+    "version": "1.0.0"
+  },
+  "plugins": [
+    {
+      "name": "flowmind",
+      "source": "./",
+      "description": "FlowMind productivity skill. Use /flowmind to manage goals, tasks, and notes."
+    }
+  ]
+}

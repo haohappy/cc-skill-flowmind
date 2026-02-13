@@ -1,0 +1,10 @@
+{
+  "name": "flowmind",
+  "description": "Manage goals, tasks, and notes with FlowMind - your personal productivity platform",
+  "version": "1.0.0",
+  "author": {
+    "name": "haohappy"
+  },
+  "homepage": "https://flowmind.life",
+  "repository": "https://github.com/haohappy/cc-skill-flowmind"
+}
