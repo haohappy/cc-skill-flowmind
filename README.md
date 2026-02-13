@@ -11,6 +11,9 @@ Flowmind is a powerful platform designed to help you manage your goals and tasks
 
 You can easily connect your bots, such as OpenClaw, to Flowmind and track their activities in real time. Monitor progress, review outputs, and stay in control of every job from a single, organized dashboard.
 
+**Create an account**
+https://flowmind.life/
+
 ![Dashboard](images/dashboard.png)
 *Dashboard — Track your productivity journey*
 
