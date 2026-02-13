@@ -34,27 +34,33 @@ While Claude Code is helping you write code, instantly capture tasks without bre
 
 ```
 /flowmind add task "Add error handling to this function" --priority high
-/flowmind add task "Write tests for UserService" --due 2025-02-20No need to switch to another app — stay focused in Claude Code.
+/flowmind add task "Write tests for UserService" --due 2025-02-20
 ```
-
+No need to switch to another app — stay focused in Claude Code.
 
 **2. Track Tasks**
 
 During code reviews with Claude Code, log issues and follow-ups:
 
+```
 /flowmind add task "Fix SQL injection vulnerability in login.py" --priority urgent
 /flowmind add task "Refactor duplicated validation logic" --priority medium
-/flowmind list tasks --status todoKeep all code review action items organized and trackable.
+/flowmind list tasks --status todo
+```
+Keep all code review action items organized and trackable.
 
 
 **3. Manage Project Milestones**
 
 Break down project goals while planning with Claude Code:
 
+```
 /flowmind add goal "Complete API v2" --category business --target 2025-03-01
 /flowmind add task "Implement pagination" --goal <goal_id>
 /flowmind add task "Add rate limiting" --goal <goal_id>
-/flowmind update goal <goal_id> --progress 30Track progress on larger coding projects without leaving your development environment.
+/flowmind update goal <goal_id> --progress 30
+```
+Track progress on larger coding projects without leaving your development environment.
 
 ## Installation
 
