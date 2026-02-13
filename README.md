@@ -244,6 +244,25 @@ Type /flowmind help <resource> for detailed options.
 | `--role` | Job title |
 | `--relationship` | business, colleague, friend, family, mentor, client, partner, other |
 
+## Troubleshooting
+
+### EXDEV: cross-device link not permitted
+
+If you see this error during installation:
+```
+Error: Failed to install: EXDEV: cross-device link not permitted
+```
+
+This happens on Linux servers (EC2, etc.) where `/tmp` and `/home` are on different filesystems.
+
+**Fix:** Set `TMPDIR` before running Claude Code:
+```bash
+mkdir -p ~/.cache/tmp
+TMPDIR=~/.cache/tmp claude
+```
+
+Then run the install commands in that session.
+
 ## Links
 
 - [FlowMind](https://flowmind.life)
