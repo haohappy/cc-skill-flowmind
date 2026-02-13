@@ -255,6 +255,22 @@ You could also use standard commands as below -
 
 ## Troubleshooting
 
+### Skip Confirmation Prompts
+
+To auto-approve FlowMind API calls without confirmation, add to your `~/.claude/settings.json`:
+
+```json
+{
+  "permissions": {
+    "allow": [
+      "Bash(curl *flowmind.life*)"
+    ]
+  }
+}
+```
+
+Or press `Shift+Tab` in Claude Code to toggle auto-accept mode.
+
 ### EXDEV: cross-device link not permitted
 
 If you see this error during installation:
