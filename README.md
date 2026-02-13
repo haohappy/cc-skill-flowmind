@@ -62,6 +62,17 @@ Break down project goals while planning with Claude Code:
 ```
 Track progress on larger coding projects without leaving your development environment.
 
+**4. Save Code Snippets & Decisions**
+
+While working with Claude Code, save important snippets, architectural decisions, or solutions for future reference:
+
+```
+/flowmind add note "Auth Implementation" --content "Using JWT with refresh tokens. Access token expires in 15min, refresh in 7 days."
+/flowmind add note "API Rate Limiting" --content "Implemented sliding window: 100 req/min per user, 1000 req/min per IP"
+/flowmind list notes
+```
+Build a knowledge base of your coding decisions without leaving your workflow.
+
 ## Installation
 
 ```bash
