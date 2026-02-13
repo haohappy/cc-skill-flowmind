@@ -257,7 +257,7 @@ You could also use standard commands as below -
 
 ### Skip Confirmation Prompts
 
-To auto-approve FlowMind API calls without confirmation, add `permissions` to your `~/.claude/settings.json`:
+To auto-approve FlowMind API calls without confirmation, add to `~/.claude/settings.json` (global) or `.claude/settings.json` (project):
 
 ```json
 {
