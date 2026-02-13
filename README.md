@@ -25,7 +25,7 @@ FlowMind is a productivity platform designed to help you manage your goals and t
 - 👥 **People** — Manage contacts and relationships
 - 🏷️ **Tags** — Organize with custom tags
 
-## Why do you need to use Flowmind for Claude Code?
+## Why do you need Flowmind for Claude Code?
 3 Use Cases:
 
 **1. Capture TODOs While Coding**
