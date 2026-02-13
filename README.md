@@ -266,8 +266,7 @@ To auto-approve FlowMind API calls without confirmation, add `permissions` to yo
   },
   "permissions": {
     "allow": [
-      "Bash(CONFIG=$(cat ~/.flowmind*)",
-      "Bash(curl *flowmind.life*)"
+      "Bash(*flowmind*)"
     ]
   }
 }
