@@ -5,14 +5,11 @@
 
 Connect [Claude Code](https://docs.anthropic.com/en/docs/claude-code) to [FlowMind](https://flowmind.life) — your personal productivity platform for goals, tasks, notes, people, and tags.
 
-## Flowmind
+## About FlowMind
 
-Flowmind is a powerful platform designed to help you manage your goals and tasks with clarity and focus. It also integrates seamlessly with AI bots, giving you a unified space to coordinate both human and automated work.
+FlowMind is a productivity platform designed to help you manage your goals and tasks with clarity and focus. Track progress, organize projects, and stay in control from a single dashboard.
 
-You can easily connect your bots, such as OpenClaw, to Flowmind and track their activities in real time. Monitor progress, review outputs, and stay in control of every job from a single, organized dashboard.
-
-**Create an account**
-https://flowmind.life/
+**Create an account:** https://flowmind.life/
 
 ![Dashboard](images/dashboard.png)
 *Dashboard — Track your productivity journey*
@@ -164,6 +161,8 @@ Type /flowmind help <resource> for detailed options.
 |---------|-------------|
 | `list tags` | List all tags |
 | `add tag <name>` | Create a tag |
+| `get tag <id>` | Get tag details |
+| `update tag <id>` | Update a tag |
 | `delete tag <id>` | Delete a tag |
 
 ## Options
