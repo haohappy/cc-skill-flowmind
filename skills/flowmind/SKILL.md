@@ -1,139 +1,230 @@
 ---
 name: flowmind
-description: Manage goals, tasks, and notes with FlowMind. Use when user wants to create/list/update tasks, goals, or notes, track productivity, or manage their focus.
+description: Manage goals, tasks, notes, people, and tags with FlowMind. Use when user wants to create/list/update/delete productivity items, track goals, manage contacts, or organize with tags.
 ---
 
 ## FlowMind Productivity Skill
 
-Connect to [FlowMind](https://flowmind.life) to manage goals, tasks, and notes.
+Connect to [FlowMind](https://flowmind.life) to manage goals, tasks, notes, people, and tags.
 
 ## Setup
 
-User needs to configure their API key first:
+User needs to configure their API key:
 
 ```bash
-# Create config directory
 mkdir -p ~/.flowmind
-
-# Save API key (user gets this from FlowMind Settings > API Keys)
 echo '{"api_key": "fm_xxx", "base_url": "https://flowmind.life/api/v1"}' > ~/.flowmind/config.json
 ```
+
+Get API key from: FlowMind → Settings → API Keys → Generate New Key
 
 ## Usage Examples
 
 <example>
-User: /flowmind add task "Review quarterly report" with high priority due tomorrow
-Assistant: [Creates task via API, confirms creation with task ID]
+User: /flowmind add task "Review report" --priority high --due 2025-01-15
+Assistant: [Creates task via POST /tasks, confirms with task ID]
 </example>
 
 <example>
-User: /flowmind list my tasks
-Assistant: [Fetches and displays tasks from API]
+User: /flowmind list tasks --status todo
+Assistant: [Fetches GET /tasks?status=todo, displays as table]
 </example>
 
 <example>
-User: /flowmind add goal "Launch MVP" in business category
-Assistant: [Creates goal via API, confirms creation]
+User: /flowmind update task abc123 --status completed
+Assistant: [Updates via PATCH /tasks/abc123, confirms]
+</example>
+
+<example>
+User: /flowmind delete goal xyz789
+Assistant: [Deletes via DELETE /goals/xyz789, confirms]
 </example>
 
 ## Instructions
 
-When user invokes this skill:
-
 ### 1. Check Configuration
 
-First, read the config file:
 ```bash
 cat ~/.flowmind/config.json
 ```
 
-If missing or invalid, guide user to set it up:
-1. Go to https://flowmind.life and sign in
-2. Click avatar → Settings → API Keys
-3. Generate new key (starts with `fm_`)
-4. Run: `echo '{"api_key": "fm_YOUR_KEY", "base_url": "https://flowmind.life/api/v1"}' > ~/.flowmind/config.json`
+If missing, guide user to set up (see Setup section).
 
-### 2. Parse User Request
+### 2. Parse User Request & Make API Call
 
-Understand what the user wants:
-- **add task** → POST /tasks
-- **add goal** → POST /goals  
-- **add note** → POST /notes
-- **list tasks** → GET /tasks
-- **list goals** → GET /goals
-- **list notes** → GET /notes
-- **focus** → GET /tasks?is_focus=true or PATCH /tasks/:id
+Use curl with Bearer token from config.
 
-### 3. Make API Calls
+---
 
-Use curl with the API key from config:
-
-```bash
-# Example: Create a task
-curl -s -X POST "${BASE_URL}/tasks" \
-  -H "Authorization: Bearer ${API_KEY}" \
-  -H "Content-Type: application/json" \
-  -d '{"title": "Task title", "priority": "high", "due_date": "2025-01-15"}'
-
-# Example: List tasks
-curl -s -X GET "${BASE_URL}/tasks" \
-  -H "Authorization: Bearer ${API_KEY}"
-
-# Example: Create a goal
-curl -s -X POST "${BASE_URL}/goals" \
-  -H "Authorization: Bearer ${API_KEY}" \
-  -H "Content-Type: application/json" \
-  -d '{"title": "Goal title", "category": "business"}'
-```
-
-### 4. Present Results
-
-Format the API response nicely for the user:
-- For created items: Show title, ID, and key details
-- For lists: Show as a clean table or bullet list
-- For errors: Explain what went wrong and how to fix
-
-## API Reference
-
-### Tasks
-
-| Field | Type | Description |
-|-------|------|-------------|
-| title | string | Task title (required) |
-| description | string | Task details |
-| priority | string | low, medium, high, urgent |
-| status | string | todo, in_progress, completed |
-| due_date | string | YYYY-MM-DD format |
-| goal_id | string | Link to parent goal |
-| is_focus | boolean | Today's focus task |
+## Commands Reference
 
 ### Goals
 
-| Field | Type | Description |
-|-------|------|-------------|
-| title | string | Goal title (required) |
-| description | string | Goal details |
-| category | string | business, career, health, personal, learning, financial |
-| target_date | string | YYYY-MM-DD format |
-| status | string | active, completed, archived |
+| Command | API | Description |
+|---------|-----|-------------|
+| `list goals` | GET /goals | List all goals |
+| `add goal <title>` | POST /goals | Create a goal |
+| `get goal <id>` | GET /goals/:id | Get goal details |
+| `update goal <id>` | PATCH /goals/:id | Update a goal |
+| `delete goal <id>` | DELETE /goals/:id | Delete a goal |
+
+**Goal Options:**
+- `--description` — Goal description
+- `--category` — business, career, health, personal, learning, financial
+- `--target` — Target date (YYYY-MM-DD)
+- `--status` — active, completed, archived
+- `--progress` — 0-100
+- `--pinned` — true/false
+
+**Goal Fields:** id, title, description, status, category, target_date, progress, pinned, created_at, updated_at
+
+---
+
+### Tasks
+
+| Command | API | Description |
+|---------|-----|-------------|
+| `list tasks` | GET /tasks | List all tasks |
+| `add task <title>` | POST /tasks | Create a task |
+| `get task <id>` | GET /tasks/:id | Get task details |
+| `update task <id>` | PATCH /tasks/:id | Update a task |
+| `delete task <id>` | DELETE /tasks/:id | Delete a task |
+| `list subtasks <id>` | GET /tasks/:id/subtasks | List subtasks |
+| `add subtask <parent_id> <title>` | POST /tasks/:id/subtasks | Create subtask |
+
+**Task Options:**
+- `--description` — Task description
+- `--priority` — low, medium, high, urgent
+- `--status` — todo, in_progress, completed, archived
+- `--energy` — low, medium, high
+- `--due` — Due date (YYYY-MM-DD)
+- `--goal` — Link to goal ID
+- `--person` — Link to person ID
+- `--estimated` — Estimated minutes
+- `--pinned` — true/false
+- `--focus` — true/false (today's focus)
+
+**Task Filters (for list):**
+- `--status` — Filter by status
+- `--priority` — Filter by priority
+- `--goal` — Filter by goal_id
+- `--due-from` — Due date from (YYYY-MM-DD)
+- `--due-to` — Due date to (YYYY-MM-DD)
+- `--focus` — Show focus tasks only
+
+**Task Fields:** id, title, description, status, priority, energy_level, due_date, scheduled_time, goal_id, person_id, parent_task_id, estimated_minutes, actual_minutes, pinned, focused, focus_today, created_at, updated_at
+
+---
 
 ### Notes
 
-| Field | Type | Description |
-|-------|------|-------------|
-| title | string | Note title (required) |
-| content | string | Note body (markdown supported) |
-| tags | array | List of tag strings |
-| goal_id | string | Link to related goal |
+| Command | API | Description |
+|---------|-----|-------------|
+| `list notes` | GET /notes | List all notes |
+| `add note <title>` | POST /notes | Create a note |
+| `get note <id>` | GET /notes/:id | Get note details |
+| `update note <id>` | PATCH /notes/:id | Update a note |
+| `delete note <id>` | DELETE /notes/:id | Delete a note |
 
-## Common Commands
+**Note Options:**
+- `--content` — Note body (markdown supported)
+- `--category` — Note category
+- `--task` — Link to task ID
+- `--pinned` — true/false
 
-- `/flowmind add task "title"` - Create a task
-- `/flowmind add task "title" --priority high --due 2025-01-15` - Task with options
-- `/flowmind add goal "title" --category business` - Create a goal
-- `/flowmind add note "title"` - Create a note
-- `/flowmind list tasks` - Show all tasks
-- `/flowmind list tasks --status todo` - Filter by status
-- `/flowmind list goals` - Show all goals
-- `/flowmind focus` - Show today's focus tasks
-- `/flowmind focus <task_id>` - Set task as focus
+**Note Fields:** id, title, content, category, task_id, is_protected, pinned, created_at
+
+---
+
+### People
+
+| Command | API | Description |
+|---------|-----|-------------|
+| `list people` | GET /people | List all people |
+| `add person <name>` | POST /people | Create a person |
+| `get person <id>` | GET /people/:id | Get person details |
+| `update person <id>` | PATCH /people/:id | Update a person |
+| `delete person <id>` | DELETE /people/:id | Delete a person |
+
+**Person Options:**
+- `--email` — Email address
+- `--phone` — Phone number
+- `--company` — Company name
+- `--role` — Job role/title
+- `--relationship` — business, colleague, friend, family, mentor, client, partner, other
+- `--notes` — Notes about person
+- `--location` — Location string
+
+**Person Fields:** id, name, email, phone, company, role, relationship_type, notes, avatar_url, birth_month, birth_day, zodiac_sign, mbti_type, location, last_met_date, created_at, updated_at
+
+---
+
+### Tags
+
+| Command | API | Description |
+|---------|-----|-------------|
+| `list tags` | GET /tags | List all tags |
+| `add tag <name>` | POST /tags | Create a tag |
+| `get tag <id>` | GET /tags/:id | Get tag details |
+| `update tag <id>` | PATCH /tags/:id | Update a tag |
+| `delete tag <id>` | DELETE /tags/:id | Delete a tag |
+
+**Tag Options:**
+- `--color` — Tag color (hex code)
+
+**Tag Fields:** id, name, color, created_at
+
+---
+
+## API Call Examples
+
+```bash
+# Read config
+CONFIG=$(cat ~/.flowmind/config.json)
+API_KEY=$(echo $CONFIG | jq -r '.api_key')
+BASE_URL=$(echo $CONFIG | jq -r '.base_url')
+
+# List goals
+curl -s "$BASE_URL/goals" -H "Authorization: Bearer $API_KEY"
+
+# Create task
+curl -s -X POST "$BASE_URL/tasks" \
+  -H "Authorization: Bearer $API_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{"title": "My task", "priority": "high", "due_date": "2025-01-15"}'
+
+# Update task
+curl -s -X PATCH "$BASE_URL/tasks/abc123" \
+  -H "Authorization: Bearer $API_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{"status": "completed"}'
+
+# Delete goal
+curl -s -X DELETE "$BASE_URL/goals/xyz789" \
+  -H "Authorization: Bearer $API_KEY"
+
+# Create person
+curl -s -X POST "$BASE_URL/people" \
+  -H "Authorization: Bearer $API_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{"name": "John Doe", "email": "john@example.com", "relationship_type": "colleague"}'
+```
+
+---
+
+## Pagination
+
+For list commands, use:
+- `--page` — Page number (default: 1)
+- `--limit` — Items per page (default: 20, max: 100)
+
+API returns: `{ data: [...], meta: { pagination: { page, limit, total, totalPages, hasMore } } }`
+
+---
+
+## Present Results
+
+- **Created/Updated:** Show item title, ID, and key fields
+- **Lists:** Format as clean table with relevant columns
+- **Deleted:** Confirm deletion with item title
+- **Errors:** Explain what went wrong and suggest fix
