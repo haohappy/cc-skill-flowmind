@@ -5,6 +5,14 @@
 
 Connect [Claude Code](https://docs.anthropic.com/en/docs/claude-code) to [FlowMind](https://flowmind.life) — your personal productivity platform for goals, tasks, and notes.
 
+## Screenshots
+
+![Dashboard](images/dashboard.png)
+*Dashboard — Track your productivity journey*
+
+![FlowMap](images/flowmap.png)
+*FlowMap — Visualize goals and tasks*
+
 ## Features
 
 - 🎯 **Goals** — Create and track goals with categories
