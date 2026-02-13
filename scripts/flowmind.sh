@@ -40,9 +40,11 @@ api_request() {
     local method="$1"
     local endpoint="$2"
     local data="$3"
-    local api_key=$(get_api_key)
     
-    local args=(-s -X "$method")
+    local api_key
+    api_key=$(get_api_key)
+    
+    local args=(-s -X "$method" --connect-timeout 10 --max-time 30)
     args+=(-H "Authorization: Bearer $api_key")
     args+=(-H "Content-Type: application/json")
     
@@ -51,11 +53,14 @@ api_request() {
     fi
     
     local response
-    response=$(curl "${args[@]}" "$API_BASE$endpoint" 2>/dev/null)
+    if ! response=$(curl "${args[@]}" "$API_BASE$endpoint" 2>/dev/null); then
+        error "Network request failed"
+    fi
     
-    # Check for errors
-    if echo "$response" | jq -e '.error' >/dev/null 2>&1; then
-        local err_msg=$(echo "$response" | jq -r '.error.message // .error // "Unknown error"')
+    # Check for errors (only if error is truthy)
+    if echo "$response" | jq -e '.error // empty | select(. != null and . != false and . != "")' >/dev/null 2>&1; then
+        local err_msg
+        err_msg=$(echo "$response" | jq -r '.error.message // .error // "Unknown error"')
         error "$err_msg"
     fi
     
@@ -95,11 +100,12 @@ cmd_config() {
         warn "API key should start with 'fm_'. Are you sure this is correct?"
     fi
     
-    # Create config directory
+    # Create config directory with secure permissions
     mkdir -p "$CONFIG_DIR"
+    chmod 700 "$CONFIG_DIR"
     
-    # Save config
-    echo "{\"api_key\": \"$api_key\"}" > "$CONFIG_FILE"
+    # Save config safely with jq
+    jq -n --arg key "$api_key" '{api_key: $key}' > "$CONFIG_FILE"
     chmod 600 "$CONFIG_FILE"
     
     success "API key saved to $CONFIG_FILE"
@@ -145,13 +151,27 @@ cmd_add_task() {
         error "Task title is required. Usage: flowmind add-task \"Task title\" [options]"
     fi
     
-    # Build JSON payload
-    local json="{\"title\": \"$title\""
-    [[ -n "$description" ]] && json+=", \"description\": \"$description\""
-    [[ -n "$priority" ]] && json+=", \"priority\": \"$priority\""
-    [[ -n "$due_date" ]] && json+=", \"due_date\": \"$due_date\""
-    [[ -n "$goal_id" ]] && json+=", \"goal_id\": \"$goal_id\""
-    json+="}"
+    # Validate priority
+    if [[ -n "$priority" ]]; then
+        case "$priority" in
+            low|medium|high|urgent) ;;
+            *) error "Invalid priority. Use: low, medium, high, urgent" ;;
+        esac
+    fi
+    
+    # Build JSON payload safely with jq
+    local json
+    json=$(jq -n \
+        --arg title "$title" \
+        --arg desc "$description" \
+        --arg prio "$priority" \
+        --arg due "$due_date" \
+        --arg goal "$goal_id" \
+        '{title: $title} + 
+         (if $desc != "" then {description: $desc} else {} end) +
+         (if $prio != "" then {priority: $prio} else {} end) +
+         (if $due != "" then {due_date: $due} else {} end) +
+         (if $goal != "" then {goal_id: $goal} else {} end)')
     
     local response
     response=$(api_request POST "/tasks" "$json")
@@ -198,12 +218,17 @@ cmd_add_goal() {
         esac
     fi
     
-    # Build JSON payload
-    local json="{\"title\": \"$title\""
-    [[ -n "$description" ]] && json+=", \"description\": \"$description\""
-    [[ -n "$category" ]] && json+=", \"category\": \"$category\""
-    [[ -n "$target_date" ]] && json+=", \"target_date\": \"$target_date\""
-    json+="}"
+    # Build JSON payload safely with jq
+    local json
+    json=$(jq -n \
+        --arg title "$title" \
+        --arg desc "$description" \
+        --arg cat "$category" \
+        --arg target "$target_date" \
+        '{title: $title} + 
+         (if $desc != "" then {description: $desc} else {} end) +
+         (if $cat != "" then {category: $cat} else {} end) +
+         (if $target != "" then {target_date: $target} else {} end)')
     
     local response
     response=$(api_request POST "/goals" "$json")
@@ -423,8 +448,8 @@ cmd_help() {
     echo ""
     echo "Examples:"
     echo "  flowmind config fm_abc123..."
-    echo "  flowmind add-task \"Review code\" -p high --due 2025-01-15"
-    echo "  flowmind add-goal \"Launch MVP\" -c business --target 2025-03-01"
+    echo "  flowmind add-task \"Review code\" -p high --due 2026-03-15"
+    echo "  flowmind add-goal \"Launch MVP\" -c business --target 2026-06-01"
     echo "  flowmind list-tasks --status todo --priority high"
     echo ""
     echo "Documentation: https://docs.flowmind.life"
