@@ -128,6 +128,15 @@ Type /flowmind help <resource> for detailed options.
 
 ## Usage
 
+The easist way to use this plugin is to tell Claude Code to do thing with natural languages, e.g.
+```
+create a new goal: Flowmind CC Plugin
+Add a task under this goal: Submit to CC marketplace
+Add a sub-task under the task
+```
+
+You could also use standard commands as below -
+
 ```bash
 # Goals
 /flowmind list goals
