@@ -21,6 +21,16 @@ Get API key from: FlowMind → Settings → API Keys → Generate New Key
 ## Usage Examples
 
 <example>
+User: /flowmind help
+Assistant: [Shows the help text below]
+</example>
+
+<example>
+User: /flowmind help tasks
+Assistant: [Shows task commands and options]
+</example>
+
+<example>
 User: /flowmind add task "Review report" --priority high --due 2025-01-15
 Assistant: [Creates task via POST /tasks, confirms with task ID]
 </example>
@@ -50,7 +60,38 @@ cat ~/.flowmind/config.json
 
 If missing, guide user to set up (see Setup section).
 
-### 2. Parse User Request & Make API Call
+### 2. Handle Help Command
+
+If user types `help`, `--help`, or `help <topic>`, show the relevant help text:
+
+**`/flowmind help`** → Show:
+```
+FlowMind - Productivity management for Claude Code
+
+Commands:
+  list <resource>              List items (goals/tasks/notes/people/tags)
+  add <resource> <title>       Create new item
+  get <resource> <id>          Get item details
+  update <resource> <id>       Update an item
+  delete <resource> <id>       Delete an item
+
+Resources: goals, tasks, notes, people, tags
+
+Examples:
+  /flowmind add task "Buy groceries" --priority high
+  /flowmind list tasks --status todo
+  /flowmind update task abc123 --status completed
+
+Type /flowmind help <resource> for detailed options.
+```
+
+**`/flowmind help goals`** → Show goal commands and all options
+**`/flowmind help tasks`** → Show task commands and all options
+**`/flowmind help notes`** → Show note commands and all options
+**`/flowmind help people`** → Show people commands and all options
+**`/flowmind help tags`** → Show tag commands and all options
+
+### 3. Parse User Request & Make API Call
 
 Use curl with Bearer token from config.
 

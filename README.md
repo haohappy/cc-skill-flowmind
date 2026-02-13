@@ -50,6 +50,10 @@ echo '{"api_key": "fm_YOUR_KEY", "base_url": "https://flowmind.life/api/v1"}' > 
 ## Usage
 
 ```bash
+# Help
+/flowmind help                    # Show all commands
+/flowmind help tasks              # Show task options
+
 # Goals
 /flowmind list goals
 /flowmind add goal "Launch MVP" --category business --target 2025-03-01
