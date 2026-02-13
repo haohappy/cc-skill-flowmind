@@ -47,13 +47,43 @@ mkdir -p ~/.flowmind
 echo '{"api_key": "fm_YOUR_KEY", "base_url": "https://flowmind.life/api/v1"}' > ~/.flowmind/config.json
 ```
 
+## Help
+
+Get help anytime with:
+
+```bash
+/flowmind help                    # Show all commands
+/flowmind help goals              # Goal options
+/flowmind help tasks              # Task options  
+/flowmind help notes              # Note options
+/flowmind help people             # People options
+/flowmind help tags               # Tag options
+```
+
+**Output:**
+```
+FlowMind - Productivity management for Claude Code
+
+Commands:
+  list <resource>              List items (goals/tasks/notes/people/tags)
+  add <resource> <title>       Create new item
+  get <resource> <id>          Get item details
+  update <resource> <id>       Update an item
+  delete <resource> <id>       Delete an item
+
+Resources: goals, tasks, notes, people, tags
+
+Examples:
+  /flowmind add task "Buy groceries" --priority high
+  /flowmind list tasks --status todo
+  /flowmind update task abc123 --status completed
+
+Type /flowmind help <resource> for detailed options.
+```
+
 ## Usage
 
 ```bash
-# Help
-/flowmind help                    # Show all commands
-/flowmind help tasks              # Show task options
-
 # Goals
 /flowmind list goals
 /flowmind add goal "Launch MVP" --category business --target 2025-03-01
