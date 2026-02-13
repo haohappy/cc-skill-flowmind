@@ -16,7 +16,7 @@ Connect [Claude Code](https://claude.ai/code) to [FlowMind](https://flowmind.lif
 
 ```bash
 /plugin marketplace add haohappy/cc-skill-flowmind
-/plugin install cc-skill-flowmind
+/plugin install cc-skill-flowmind@cc-skill-flowmind
 ```
 
 ## Quick Start
