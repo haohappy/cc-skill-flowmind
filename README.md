@@ -266,6 +266,7 @@ To auto-approve FlowMind API calls without confirmation, add `permissions` to yo
   },
   "permissions": {
     "allow": [
+      "Read(~/.flowmind/*)",
       "Bash(*flowmind*)"
     ]
   }
