@@ -15,12 +15,8 @@ Connect [Claude Code](https://claude.ai/code) to [FlowMind](https://flowmind.lif
 ## Installation
 
 ```bash
-/install flowmind
-```
-
-Or manually clone:
-```bash
-git clone https://github.com/haohappy/cc-skill-flowmind.git
+/plugin marketplace add haohappy/cc-skill-flowmind
+/plugin install cc-skill-flowmind
 ```
 
 ## Quick Start
